@@ -1,5 +1,5 @@
 const erroHandler = (err, req, res, next) => {
-  const responseCode = res.statatusCode; 
+  let responseCode = res.statusCode; 
   if (responseCode<400){
     responseCode=500; 
   }

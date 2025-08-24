@@ -3,7 +3,8 @@ const Otp = require('../models/Otp');
 const User = require('../models/User');
 const asynchandler = require('express-async-handler');
 const bcrypt = require('bcrypt');
-const crypto = required('crypto');
+const crypto = require('crypto');
+const sendEmail = require('../utils/sendEmail');
 
 exports.sentOtpForRegister = asynchandler(async(req , res)=>{
 
@@ -22,10 +23,10 @@ exports.sentOtpForRegister = asynchandler(async(req , res)=>{
    }
  
    const otp = crypto.randomInt(1000,9999);   
-   
-   sentEmail(email, "otp for Registration" , `This is your otp ${otp}`);
 
-   const hashedPass = await bcrypt.hash(passoword , 10);
+   sendEmail(email, "otp for Registration" , `This is your otp ${otp}`);
+
+   const hashedPass = await bcrypt.hash(password , 10);
 
    await Otp.create({email, otp});
 
