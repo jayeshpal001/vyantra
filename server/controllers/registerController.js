@@ -38,4 +38,36 @@ exports.sentOtpForRegister = asynchandler(async(req , res)=>{
    })   
 })
 
+exports.verifyRegister = asynchandler(async(req,res)=>{
+
+   const{email} = req.body;
+    const{otp} = req.body;
+   
+    const tempUser = await TempUser.findOne({email});
+
+    const isOtp = await Otp.findOne({email});
+
+    if(!tempUser){
+      res.status(500);
+      throw new Error("your email is not register");
+    }
+
+    if(otp!==isOtp.otp){
+      res.status(500);
+      throw new Error("Invalid otp"); 
+    }
+
+   const user =  await User.create({name:tempUser.name , email:tempUser.email, password:tempUser.password});
+
+   await tempUser.deleteOne({email});
+   await isOtp.deleteOne({email});
+
+   res.json({
+      message:"register successfully",
+      User: user
+   });
+
+
+})
+
  
