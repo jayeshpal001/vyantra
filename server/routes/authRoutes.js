@@ -4,6 +4,6 @@ const {sentOtpForRegister , verifyRegister} = require("../controllers/registerCo
  
 
 router.post('/register/sendOtp' , sentOtpForRegister);
-router.post('/register/verifyUser' , verifyRegister);
+router.post('/register/verifyOtp' , verifyRegister);
 
 module.exports = router;
