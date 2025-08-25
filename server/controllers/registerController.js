@@ -6,68 +6,93 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const sendEmail = require('../utils/sendEmail');
 
-exports.sentOtpForRegister = asynchandler(async(req , res)=>{
+// ------------------ SEND OTP ------------------
+exports.sentOtpForRegister = asynchandler(async (req, res) => {
+  const { name, email, password } = req.body;
 
-   const{name , email ,password} = req.body;
-
-   if(!name || !email || !password){
-      res.status(400);
-      throw new Error("plzz enter all the fields");
-   }
-
-   const user = await User.findOne({email});
-
-   if(user){
+  if (!name || !email || !password) {
     res.status(400);
-    throw new Error("User already exist");
-   }
- 
-   const otp = crypto.randomInt(1000,9999);   
+    throw new Error("Please enter all the fields");
+  }
 
-   sendEmail(email, "otp for Registration" , `This is your otp ${otp}`);
+  const user = await User.findOne({ email });
+  if (user) {
+    res.status(400);
+    throw new Error("User already exists");
+  }
 
-   const hashedPass = await bcrypt.hash(password , 10);
+  // Generate random 4 digit OTP
+  const otp = crypto.randomInt(1000, 9999);
 
-   await Otp.create({email, otp});
+  // Send OTP to user
+  sendEmail(email, "OTP for Registration", `Your OTP is: ${otp}`);
 
-   const data = await TempUser.create({name,email, password:hashedPass});
+  // Hash password for storing temporarily
+  const hashedPass = await bcrypt.hash(password, 10);
 
-   res.status(200).json({
-    message:"email sent successfully",
-    user:data.email
-   })   
-})
+  // Overwrite old OTP if exists
+  await Otp.findOneAndUpdate(
+    { email },
+    { otp, expiresAt: Date.now() + 5 * 60 * 1000 }, // OTP valid for 5 mins
+    { upsert: true, new: true }
+  );
 
-exports.verifyRegister = asynchandler(async(req,res)=>{
+  // Overwrite old temp user if exists
+  await TempUser.findOneAndUpdate(
+    { email },
+    { name, email, password: hashedPass },
+    { upsert: true, new: true }
+  );
 
-   const{email} = req.body;
-    const{otp} = req.body;
-   
-    const tempUser = await TempUser.findOne({email});
+  res.status(200).json({
+    message: "OTP sent successfully",
+    user: email,
+  });
+});
 
-    const isOtp = await Otp.findOne({email});
+// ------------------ VERIFY OTP ------------------
+exports.verifyRegister = asynchandler(async (req, res) => {
+  const { email, otp } = req.body;
 
-    if(!tempUser){
-      res.status(500);
-      throw new Error("your email is not register");
-    }
+  const tempUser = await TempUser.findOne({ email });
+  if (!tempUser) {
+    res.status(400);
+    throw new Error("Your email is not registered");
+  }
 
-    if(otp!==isOtp.otp){
-      res.status(500);
-      throw new Error("Invalid otp"); 
-    }
+  // Fetch latest OTP
+  const isOtp = await Otp.findOne({ email });
+  if (!isOtp) {
+    res.status(400);
+    throw new Error("OTP not found, please request again");
+  }
 
-   const user =  await User.create({name:tempUser.name , email:tempUser.email, password:tempUser.password});
+  // Check expiry
+  if (Date.now() > isOtp.expiresAt) {
+    await isOtp.deleteOne({ email });
+    res.status(400);
+    throw new Error("OTP expired, please request again");
+  }
 
-   await tempUser.deleteOne({email});
-   await isOtp.deleteOne({email});
+  // Compare OTP (plain text)
+  if (otp != isOtp.otp) {
+    res.status(400);
+    throw new Error("Invalid OTP");
+  }
 
-   res.json({
-      message:"register successfully",
-      User: user
-   });
+  // Create permanent user
+  const user = await User.create({
+    name: tempUser.name,
+    email: tempUser.email,
+    password: tempUser.password,
+  });
 
+  // Delete temp user + OTP after success
+  await TempUser.deleteOne({ email });
+  await Otp.deleteOne({ email });
 
-})
-
- 
+  res.json({
+    message: "Registration successful",
+    user,
+  });
+});
