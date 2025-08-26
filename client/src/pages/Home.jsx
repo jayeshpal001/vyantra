@@ -1,11 +1,29 @@
-import React from 'react'
+import React from "react";
+import Header from "../components/Header";
+import HeroSection from "../components/HeroSection";
+// import CategorySection from "../components/CategorySection";
+// import ProductSection from "../components/ProductSection";
+// import Footer from "../components/Footer";
 
-function Home() {
+const Home = () => {
   return (
-    <>
-      <h1>This is our Home page</h1>
-    </>
-  )
-}
+    <div className="w-full min-h-screen flex flex-col">
+      {/* Header */}
+      <Header />
 
-export default Home
+      {/* Hero Section */}
+      <HeroSection />
+
+      {/* Categories */}
+      {/* <CategorySection /> */}
+
+      {/* Products */}
+      {/* <ProductSection /> */}
+
+      {/* Footer */}
+      {/* <Footer /> */}
+    </div>
+  );
+};
+
+export default Home;
