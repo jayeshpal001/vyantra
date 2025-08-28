@@ -3,8 +3,9 @@ import Header from "../components/Header";
 import HeroSection from "../components/HeroSection";
 import CategorySection from "../components/CategorySection";
 import FeaturedProducts from "../components/FeaturedProducts";
+import Newsletter from "../components/Newsletter";
 // import CategorySection from "../components/CategorySection";
-// import Footer from "../components/Footer";
+import Footer from "../components/Footer";
 
 const Home = () => {
   return (
@@ -21,8 +22,10 @@ const Home = () => {
       {/* Products */}
       <FeaturedProducts />
 
+      <Newsletter />
+
       {/* Footer */}
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };
