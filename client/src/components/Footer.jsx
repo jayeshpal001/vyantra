@@ -21,10 +21,10 @@ export default function Footer() {
 
           <div className="mt-6 space-y-3 text-sm">
             <p className="flex items-center gap-2">
-              <Mail size={16} /> <span>support@vyantra.com</span>
+              <Mail size={16} /> <span>jayashpal5@gmail.com</span>
             </p>
             <p className="flex items-center gap-2">
-              <Phone size={16} /> <span>+91 98765 43210</span>
+              <Phone size={16} /> <span>+91 91798 98569</span>
             </p>
             <p className="flex items-center gap-2">
               <MapPin size={16} /> <span>Delhi, India - 110001</span>

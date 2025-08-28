@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Search, Heart, ShoppingCart, User, Menu, X } from "lucide-react";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+  const userMenuRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -11,6 +14,19 @@ export default function Header() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   return (
@@ -45,7 +61,7 @@ export default function Header() {
           </div>
 
           {/* Search + Icons */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 relative">
             {/* Search */}
             <div className="relative hidden sm:block">
               <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
@@ -69,8 +85,37 @@ export default function Header() {
                   3
                 </span>
               </div>
-              <div className="p-2 rounded-full hover:bg-indigo-50 transition-colors duration-300 cursor-pointer">
-                <User className="w-5 h-5 hover:text-indigo-400 transition-colors duration-300" />
+
+              {/* User with Dropdown */}
+              <div className="relative" ref={userMenuRef}>
+                <div
+                  className="p-2 rounded-full hover:bg-indigo-50 transition-colors duration-300 cursor-pointer"
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                >
+                  <User className="w-5 h-5 hover:text-indigo-400 transition-colors duration-300" />
+                </div>
+
+                {/* Dropdown */}
+                <div
+                  className={`absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 transform origin-top-right ${
+                    isUserMenuOpen
+                      ? "scale-100 opacity-100"
+                      : "scale-95 opacity-0 pointer-events-none"
+                  }`}
+                >
+                  <a
+                    href="#login"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 transition-colors duration-300"
+                  >
+                    Login
+                  </a>
+                  <a
+                    href="#signup"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 transition-colors duration-300"
+                  >
+                    Sign Up
+                  </a>
+                </div>
               </div>
             </div>
 
