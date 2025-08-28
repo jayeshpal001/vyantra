@@ -1,5 +1,9 @@
 import React from "react";
 import { ShoppingCart } from "lucide-react";
+import featuredP1 from "../assets/featuredP1.png";
+import featuredP2 from "../assets/featuredP2.png";
+import featuredP3 from "../assets/featuredP3.png";
+import featuredP4 from "../assets/featuredP4.png";
 
 const products = [
   {
@@ -11,7 +15,7 @@ const products = [
     price: 899,
     oldPrice: 1099,
     discount: "18% off",
-    image: "/assets/products/phone.png",
+    image:featuredP1,
   },
   {
     id: 2,
@@ -22,7 +26,7 @@ const products = [
     price: 299,
     oldPrice: 399,
     discount: "25% off",
-    image: "/assets/products/headphones.png",
+   image:featuredP2,
   },
   {
     id: 3,
@@ -33,7 +37,7 @@ const products = [
     price: 1299,
     oldPrice: 1599,
     discount: "19% off",
-    image: "/assets/products/laptop.png",
+  image:featuredP3,
   },
   {
     id: 4,
@@ -44,7 +48,7 @@ const products = [
     price: 399,
     oldPrice: 499,
     discount: "20% off",
-    image: "/assets/products/watch.png",
+    image:featuredP4,
   },
 ];
 
