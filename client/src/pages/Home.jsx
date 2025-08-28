@@ -1,8 +1,8 @@
 import React from "react";
 import Header from "../components/Header";
 import HeroSection from "../components/HeroSection";
+import FeaturedProducts from "../components/FeaturedProducts";
 // import CategorySection from "../components/CategorySection";
-// import ProductSection from "../components/ProductSection";
 // import Footer from "../components/Footer";
 
 const Home = () => {
@@ -18,7 +18,7 @@ const Home = () => {
       {/* <CategorySection /> */}
 
       {/* Products */}
-      {/* <ProductSection /> */}
+      <FeaturedProducts />
 
       {/* Footer */}
       {/* <Footer /> */}
