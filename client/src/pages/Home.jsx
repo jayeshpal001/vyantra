@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../components/Header";
 import HeroSection from "../components/HeroSection";
+import CategorySection from "../components/CategorySection";
 // import CategorySection from "../components/CategorySection";
 // import ProductSection from "../components/ProductSection";
 // import Footer from "../components/Footer";
@@ -15,7 +16,7 @@ const Home = () => {
       <HeroSection />
 
       {/* Categories */}
-      {/* <CategorySection /> */}
+      <CategorySection />
 
       {/* Products */}
       {/* <ProductSection /> */}
