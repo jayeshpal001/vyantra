@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Search, Heart, ShoppingCart, User, Menu, X } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,9 +33,7 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-sm"
-          : "bg-indigo-50"
+        isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-indigo-50"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,18 +44,22 @@ export default function Header() {
               VYANTRA
             </div>
             <nav className="hidden md:flex gap-6 text-sm font-medium">
-              {["Electronics", "Fashion", "Home & Living", "Sports", "Beauty"].map(
-                (item) => (
-                  <a
-                    key={item}
-                    href="#"
-                    className="text-gray-700 hover:text-indigo-400 transition-colors duration-300 relative group"
-                  >
-                    {item}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
-                  </a>
-                )
-              )}
+              {[
+                "Electronics",
+                "Fashion",
+                "Home & Living",
+                "Sports",
+                "Beauty",
+              ].map((item) => (
+                <a
+                  key={item}
+                  href="#"
+                  className="text-gray-700 hover:text-indigo-400 transition-colors duration-300 relative group"
+                >
+                  {item}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-400 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+              ))}
             </nav>
           </div>
 
@@ -103,18 +106,19 @@ export default function Header() {
                       : "scale-95 opacity-0 pointer-events-none"
                   }`}
                 >
-                  <a
-                    href="#login"
+                  <NavLink
+                    to="/logIn"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 transition-colors duration-300"
                   >
                     Login
-                  </a>
-                  <a
-                    href="#signup"
+                  </NavLink>
+
+                  <NavLink
+                    to="/signUp"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 transition-colors duration-300"
                   >
                     Sign Up
-                  </a>
+                  </NavLink>
                 </div>
               </div>
             </div>
@@ -154,17 +158,21 @@ export default function Header() {
             />
           </div>
           <nav className="flex flex-col space-y-3">
-            {["Electronics", "Fashion", "Home & Living", "Sports", "Beauty"].map(
-              (item) => (
-                <a
-                  key={item}
-                  href="#"
-                  className="text-gray-700 hover:text-indigo-400 transition-colors duration-300 py-2 px-3 rounded-md hover:bg-indigo-50"
-                >
-                  {item}
-                </a>
-              )
-            )}
+            {[
+              "Electronics",
+              "Fashion",
+              "Home & Living",
+              "Sports",
+              "Beauty",
+            ].map((item) => (
+              <a
+                key={item}
+                href="#"
+                className="text-gray-700 hover:text-indigo-400 transition-colors duration-300 py-2 px-3 rounded-md hover:bg-indigo-50"
+              >
+                {item}
+              </a>
+            ))}
           </nav>
         </div>
       </div>
