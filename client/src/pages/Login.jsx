@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import  { useContext, useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 
- function Login() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+import { AuthContext } from "../context/AuthContext";
 
+function Login() {
+  const [formData, setFormData] = useState({ email: "", password: "", otp: "" });
+  const {otpHandler, sendLoginOtp, verifyLoginOtp} = useContext(AuthContext); 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const sendOtp = async (e) => {
     e.preventDefault();
-    console.log("Login data:", formData);
+    sendLoginOtp(formData);
+  }
+  const verifyOtp = (e) => {
+    e.preventDefault();
+    verifyLoginOtp(formData);
   };
 
   return (
@@ -27,7 +33,7 @@ import { Link } from "react-router-dom";
         </h2>
         <p className="text-gray-600 text-center mt-2">Login to continue</p>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+        <form className="mt-6 space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700">Email</label>
             <input
@@ -53,13 +59,32 @@ import { Link } from "react-router-dom";
               placeholder="Enter your password"
             />
           </div>
-
-          <button
+          {otpHandler&& <div>
+            <label className="block text-sm font-medium text-gray-700">Otp</label>
+            <input
+              type="text"
+              name="otp"
+              value={formData.otp}
+              onChange={handleChange}
+              required
+              className="mt-2 w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-300 focus:outline-none shadow-sm"
+              placeholder="Enter your password"
+            />
+          </div>}
+          {!otpHandler&&<button
             type="submit"
+            onClick={sendOtp}
+            className="w-full py-3 bg-gradient-to-r from-indigo-400 to-purple-500 text-white font-semibold rounded-xl shadow-md hover:opacity-90 transition-all duration-300"
+          >
+            Send OTP
+          </button>}
+          {otpHandler&&<button
+            type="submit"
+            onClick={verifyOtp}
             className="w-full py-3 bg-gradient-to-r from-indigo-400 to-purple-500 text-white font-semibold rounded-xl shadow-md hover:opacity-90 transition-all duration-300"
           >
             Login
-          </button>
+          </button>}
         </form>
 
         <p className="text-center text-gray-600 mt-5 text-sm">

@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Search, Heart, ShoppingCart, User, Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { UIContext } from "../context/UIContext";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const { isLoggedIn } = useContext(UIContext);
 
   const userMenuRef = useRef(null);
 
@@ -32,9 +34,8 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-indigo-50"
-      }`}
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-indigo-50"
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-20">
@@ -99,12 +100,11 @@ export default function Header() {
                 </div>
 
                 {/* Dropdown */}
-                <div
-                  className={`absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 transform origin-top-right ${
-                    isUserMenuOpen
-                      ? "scale-100 opacity-100"
-                      : "scale-95 opacity-0 pointer-events-none"
-                  }`}
+                {!isLoggedIn && <div
+                  className={`absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 transform origin-top-right ${isUserMenuOpen
+                    ? "scale-100 opacity-100"
+                    : "scale-95 opacity-0 pointer-events-none"
+                    }`}
                 >
                   <NavLink
                     to="/logIn"
@@ -119,7 +119,30 @@ export default function Header() {
                   >
                     Sign Up
                   </NavLink>
-                </div>
+
+                </div>}
+                {isLoggedIn && <div
+                  className={`absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 transform origin-top-right ${isUserMenuOpen
+                    ? "scale-100 opacity-100"
+                    : "scale-95 opacity-0 pointer-events-none"
+                    }`}
+                >
+                  <NavLink
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 transition-colors duration-300"
+                  >
+                    Profile
+                  </NavLink>
+
+                  <NavLink
+                    to="/logOut"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 transition-colors duration-300"
+                  >
+                    Log Out
+                  </NavLink>
+
+
+                </div>}
               </div>
             </div>
 
@@ -140,11 +163,10 @@ export default function Header() {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden transition-all duration-500 ease-in-out ${
-          isMobileMenuOpen
-            ? "max-h-96 opacity-100"
-            : "max-h-0 opacity-0 overflow-hidden"
-        }`}
+        className={`md:hidden transition-all duration-500 ease-in-out ${isMobileMenuOpen
+          ? "max-h-96 opacity-100"
+          : "max-h-0 opacity-0 overflow-hidden"
+          }`}
       >
         <div className="px-4 pt-2 pb-6 space-y-4 bg-white/95 backdrop-blur-md border-t border-gray-100">
           <div className="relative mt-2">
