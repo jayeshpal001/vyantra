@@ -73,8 +73,22 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const logout = async () => {
+        try {
+            const res = await axios.get("http://localhost:5000/api/users/logout", { withCredentials: true });
+            console.log(res.data);
+            alert("Logged out successfully");
+            setIsLoggedIn(false);
+            navigate("/logIn");
+        } catch (error) {
+            console.log(error.message);
+            console.log(error.response.data.message);
+            alert("Error logging out. Please try again.");
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ otpHandler, sendRegiterOtp, verifyRegisterOtp, sendLoginOtp, verifyLoginOtp }}>
+        <AuthContext.Provider value={{ otpHandler, sendRegiterOtp, verifyRegisterOtp, sendLoginOtp, verifyLoginOtp, logout }}>
             {children}
         </AuthContext.Provider>
     );

@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { Search, Heart, ShoppingCart, User, Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { UIContext } from "../context/UIContext";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Header() {
+  const {logout}=useContext(AuthContext); 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -135,10 +137,10 @@ export default function Header() {
                   </NavLink>
 
                   <NavLink
-                    to="/logOut"
+                    onClick={logout}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 transition-colors duration-300"
                   >
-                    Log Out
+                    Log Out 
                   </NavLink>
 
 
