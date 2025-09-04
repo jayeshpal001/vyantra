@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function Signup() {
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [otpHandler,setOtpHandler]=useState(false)
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" ,otp:""});
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -11,20 +13,40 @@ function Signup() {
   const sendOtp=async(e)=>{
     e.preventDefault();
     try {
-      await axios.post("",{
+      const res=await axios.post("http://localhost:5000/api/users/register/sendOtp",{
         name:formData.name,
         email:formData.email,
         password:formData.password
-      })
-    } catch (error) {
+      },{
+       withCredentials:true
+      });
+      console.log("error",res.data);
+      alert("otp sent successfully");
+      setOtpHandler(true)
       
+    } catch (error) {
+      console.log("error",error.response.data.message);
     }
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Signup data:", formData);
-  };
+
+
+    const verifyOtp=async(e)=>{
+       e.preventDefault();
+      try {
+        const res=await axios.post("http://localhost:5000/api/users/register/verifyOtp",{
+          email:formData.email,
+          otp:formData.otp
+        },{
+         withCredentials: true,
+        })
+         console.log("error",res.data);
+      } 
+      catch (error) {
+        console.log("error",error.response.data.message);
+      }
+    }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-indigo-100 to-purple-50 px-4">
@@ -39,7 +61,7 @@ function Signup() {
         </h2>
         <p className="text-gray-600 text-center mt-2">Join us and start shopping</p>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+       {!otpHandler?(<form  className="mt-6 space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700">Name</label>
             <input
@@ -78,21 +100,47 @@ function Signup() {
               placeholder="Create a password"
             />
           </div>
+          <button
+            type="submit"
+            onSubmit={sendOtp}
+            className="w-full py-3 bg-gradient-to-r from-purple-400 to-indigo-500 text-white font-semibold rounded-xl shadow-md hover:opacity-90 transition-all duration-300"
+          >
+            Send Otp
+          </button>
+            <p className="text-center text-gray-600 mt-5 text-sm">
+          Already have an account?{" "}
+          <Link to="/logIn" className="text-indigo-500 font-medium hover:underline">
+            Login
+          </Link>
+        </p>
+          </form>
+        ):(<form onSubmit={verifyOtp}> 
+        <div>
+            <label className="block text-sm font-medium text-gray-700">Otp</label>
+            <input
+              type="number"
+              name="otp"
+              value={formData.otp}
+              onChange={handleChange}
+              required
+              className="mt-2 w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-300 focus:outline-none shadow-sm"
+              placeholder="Enter otp"
+            />
+          </div>
 
           <button
             type="submit"
             className="w-full py-3 bg-gradient-to-r from-purple-400 to-indigo-500 text-white font-semibold rounded-xl shadow-md hover:opacity-90 transition-all duration-300"
           >
             Sign Up
-          </button>
-        </form>
+          </button></form>
+        )} 
+           
+         
+         
+        
 
-        <p className="text-center text-gray-600 mt-5 text-sm">
-          Already have an account?{" "}
-          <Link to="/logIn" className="text-indigo-500 font-medium hover:underline">
-            Login
-          </Link>
-        </p>
+      
       </motion.div>
     </div>
   );
