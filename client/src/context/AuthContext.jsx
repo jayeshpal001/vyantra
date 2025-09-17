@@ -12,9 +12,9 @@ export const AuthProvider = ({ children }) => {
     const sendRegiterOtp = async (formData) => {
         try {
             const res = await axios.post("http://localhost:5000/api/users/register/sendOtp", {
-                name: formData.name,
-                email: formData.email,
-                password: formData.password
+                name: formData?.name,
+                email: formData?.email,
+                password: formData?.password
             }, { withCredentials: true })
             console.log(res.data);
             alert("OTP sent to your email!");

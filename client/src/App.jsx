@@ -14,10 +14,6 @@ const App = () => {
       <Route path='/' element={<Home />}></Route>
       <Route path='/signUp' element={<Signup />}></Route>
       <Route path='/logIn' element={<Login />}></Route>
-<<<<<<< HEAD
-    </Routes>    
-    
-=======
       <Route path='/profile' element={<Profile />}></Route>
     </Routes>
 
@@ -26,7 +22,6 @@ const App = () => {
 
 
 
->>>>>>> main
   )
 }
 
