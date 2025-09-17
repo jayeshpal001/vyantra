@@ -1,29 +1,23 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-
+import { AuthContext } from "../context/AuthContext";
 function Signup() {
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+ 
+  const [formData, setFormData] = useState({ name: "", email: "", password: "", otp: "" });
+  const { sendRegiterOtp, verifyRegisterOtp, otpHandler } = useContext(AuthContext);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const sendOtp=async(e)=>{
+  const sendOtp = async (e) => {
     e.preventDefault();
-    try {
-      await axios.post("",{
-        name:formData.name,
-        email:formData.email,
-        password:formData.password
-      })
-    } catch (error) {
-      
-    }
+    sendRegiterOtp(formData);
   }
 
-  const handleSubmit = (e) => {
+  const verifyOtp = (e) => {
     e.preventDefault();
-    console.log("Signup data:", formData);
+    verifyRegisterOtp(formData);
   };
 
   return (
@@ -39,7 +33,7 @@ function Signup() {
         </h2>
         <p className="text-gray-600 text-center mt-2">Join us and start shopping</p>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+        <form className="mt-6 space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700">Name</label>
             <input
@@ -78,13 +72,30 @@ function Signup() {
               placeholder="Create a password"
             />
           </div>
-
-          <button
-            type="submit"
+          {otpHandler&&<div>
+            <label className="block text-sm font-medium text-gray-700">Otp</label>
+            <input
+              type="text"
+              name="otp"
+              value={formData.otp}
+              onChange={handleChange}
+              required
+              className="mt-2 w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-300 focus:outline-none shadow-sm"
+              placeholder="Enter OTP"
+            />
+          </div>}
+          {!otpHandler&&<button
+            type="submit"  onClick={sendOtp}
+            className="w-full py-3 bg-gradient-to-r from-purple-400 to-indigo-500 text-white font-semibold rounded-xl shadow-md hover:opacity-90 transition-all duration-300"
+          >
+            Send OTP
+          </button>}
+          {otpHandler&&<button
+            type="submit"  onClick={verifyOtp}
             className="w-full py-3 bg-gradient-to-r from-purple-400 to-indigo-500 text-white font-semibold rounded-xl shadow-md hover:opacity-90 transition-all duration-300"
           >
             Sign Up
-          </button>
+          </button>}
         </form>
 
         <p className="text-center text-gray-600 mt-5 text-sm">
