@@ -53,6 +53,7 @@ export default function Header() {
                 "Home & Living",
                 "Sports",
                 "Beauty",
+                
               ].map((item) => (
                 <a
                   key={item}
