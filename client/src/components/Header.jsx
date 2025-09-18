@@ -3,13 +3,15 @@ import { Search, Heart, ShoppingCart, User, Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { UIContext } from "../context/UIContext";
 import { AuthContext } from "../context/AuthContext";
+import { useCart } from "../context/CartContext"; // ✅ import cart context
 
 export default function Header() {
-  const {logout}=useContext(AuthContext); 
+  const { logout } = useContext(AuthContext);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { isLoggedIn } = useContext(UIContext);
+  const { cart } = useCart(); // ✅ get cart from context
 
   const userMenuRef = useRef(null);
 
@@ -34,6 +36,9 @@ export default function Header() {
     };
   }, []);
 
+  // ✅ calculate total quantity
+  const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+
   return (
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-indigo-50"
@@ -53,7 +58,7 @@ export default function Header() {
                 "Home & Living",
                 "Sports",
                 "Beauty",
-                
+
               ].map((item) => (
                 <a
                   key={item}
@@ -86,12 +91,20 @@ export default function Header() {
               <div className="p-2 rounded-full hover:bg-indigo-50 transition-colors duration-300 cursor-pointer">
                 <Heart className="w-5 h-5 hover:text-indigo-400 transition-colors duration-300" />
               </div>
-              <div className="p-2 rounded-full hover:bg-indigo-50 transition-colors duration-300 cursor-pointer relative">
-                <ShoppingCart className="w-5 h-5 hover:text-indigo-400 transition-colors duration-300" />
-                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-indigo-400 to-purple-400 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow-sm">
-                  3
-                </span>
+            
+              <div className="p-2 rounded-full hover:bg-indigo-50 cursor-pointer relative">
+                <NavLink to="/cart">
+                  <ShoppingCart className="w-8 h-6 hover:text-indigo-400" />
+                </NavLink>
+
+                {/* ✅ dynamic quantity */}
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-indigo-400 to-purple-400 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow-sm">
+                    {totalItems}
+                  </span>
+                )}
               </div>
+
 
               {/* User with Dropdown */}
               <div className="relative" ref={userMenuRef}>
@@ -141,7 +154,7 @@ export default function Header() {
                     onClick={logout}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 transition-colors duration-300"
                   >
-                    Log Out 
+                    Log Out
                   </NavLink>
 
 

@@ -4,6 +4,7 @@ import featuredP1 from "../assets/featuredP1.png";
 import featuredP2 from "../assets/featuredP2.png";
 import featuredP3 from "../assets/featuredP3.png";
 import featuredP4 from "../assets/featuredP4.png";
+import { useCart } from "../context/CartContext";  // ⬅️ import hook
 
 const products = [
   {
@@ -53,6 +54,7 @@ const products = [
 ];
 
 export default function FeaturedProducts() {
+   const { addToCart } = useCart();
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-6">
@@ -117,8 +119,9 @@ export default function FeaturedProducts() {
                 </div>
 
                 {/* Button */}
-                <button className="mt-5 w-full flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white py-2.5 rounded-lg shadow-md transform transition-all duration-300 hover:scale-105">
-                  Add to Cart <ShoppingCart size={18} />
+                <button onClick={() => addToCart(product)}  className="mt-5 w-full flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white py-2.5 rounded-lg shadow-md transform transition-all duration-300 hover:scale-105">
+                  Add to Cart <ShoppingCart size={18} 
+                    />
                 </button>
               </div>
             </div>
